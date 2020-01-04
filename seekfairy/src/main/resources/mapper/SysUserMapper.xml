@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aicat.seekfairy.dao.SysUserDao">
+  <resultMap id="BaseResultMap" type="com.aicat.seekfairy.entity.SysUser">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="user_name" jdbcType="VARCHAR" property="user_name" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="mobile" jdbcType="VARCHAR" property="mobile" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmt_create" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmt_modified" />
+    <result column="sex" jdbcType="BIGINT" property="sex" />
+    <result column="birth" jdbcType="TIMESTAMP" property="birth" />
+    <result column="live_address" jdbcType="VARCHAR" property="live_address" />
+    <result column="hobby" jdbcType="VARCHAR" property="hobby" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="district" jdbcType="VARCHAR" property="district" />
+    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.aicat.seekfairy.entity.SysUser">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sys_user (user_name, `name`, `password`, 
+      email, mobile, `status`, 
+      gmt_create, gmt_modified, sex, 
+      birth, live_address, hobby, 
+      province, city, district, avatar
+      )
+    values (#{user_name,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{mobile,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT}, 
+      #{gmt_create,jdbcType=TIMESTAMP}, #{gmt_modified,jdbcType=TIMESTAMP}, #{sex,jdbcType=BIGINT}, 
+      #{birth,jdbcType=TIMESTAMP}, #{live_address,jdbcType=VARCHAR}, #{hobby,jdbcType=VARCHAR}, 
+      #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{district,jdbcType=VARCHAR},
+      #{avatar,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.aicat.seekfairy.entity.SysUser">
+    update sys_user
+    <set>
+      <if test="user_name != null">`user_name` = #{user_name}, </if>
+      <if test="name != null">`name` = #{name}, </if>
+      <if test="password != null">`password` = #{password}, </if>
+      <if test="email != null">`email` = #{email}, </if>
+      <if test="mobile != null">`mobile` = #{mobile}, </if>
+      <if test="status != null">`status` = #{status}, </if>
+      <if test="gmt_modified != null">`gmt_modified` = #{gmt_modified}, </if>
+      <if test="sex != null">`sex` = #{sex}, </if>
+      <if test="birth != null">`birth` = #{birth}, </if>
+      <if test="live_address != null">`live_address` = #{live_address}, </if>
+      <if test="hobby != null">`hobby` = #{hobby}, </if>
+      <if test="province != null">`province` = #{province}, </if>
+      <if test="city != null">`city` = #{city}, </if>
+      <if test="district != null">`district` = #{district}, </if>
+      <if test="avatar != null">`avatar` = #{avatar} </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, user_name, `name`, `password`, email, mobile, `status`, gmt_create, gmt_modified, 
+    sex, birth, live_address, hobby, province, city, district, avatar
+    from sys_user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, user_name, `name`, `password`, email, mobile, `status`, gmt_create, gmt_modified, 
+    sex, birth, live_address, hobby, province, city, district, avatar
+    from sys_user
+  </select>
+</mapper>

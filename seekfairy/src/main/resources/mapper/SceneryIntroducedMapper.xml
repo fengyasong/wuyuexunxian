@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aicat.seekfairy.dao.SceneryIntroducedDao">
+  <resultMap id="BaseResultMap" type="com.aicat.seekfairy.entity.SceneryIntroduced">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="scenery_id" jdbcType="BIGINT" property="scenery_id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="brief" jdbcType="VARCHAR" property="brief" />
+    <result column="label" jdbcType="VARCHAR" property="label" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="create_date" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="update_date" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="praise" jdbcType="INTEGER" property="praise" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="imgs" jdbcType="VARCHAR" property="imgs" />
+    <result column="author" jdbcType="BIGINT" property="author" />
+    <result column="details" jdbcType="LONGVARCHAR" property="details" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from scenery_introduced
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.aicat.seekfairy.entity.SceneryIntroduced">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into scenery_introduced (scenery_id, `name`, brief, 
+      `label`, create_date, `status`, 
+      praise, url, imgs, 
+      author, details,update_date
+      )
+    values (#{scenery_id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{brief,jdbcType=VARCHAR}, 
+      #{label,jdbcType=VARCHAR}, #{create_date,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, 
+      #{praise,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{imgs,jdbcType=VARCHAR}, 
+      #{author,jdbcType=BIGINT}, #{details,jdbcType=LONGVARCHAR}, #{update_date,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.aicat.seekfairy.entity.SceneryIntroduced">
+    update scenery_introduced
+    <set>
+      <if test="scenery_id != null">`scenery_id` = #{scenery_id}, </if>
+      <if test="name != null">`name` = #{name}, </if>
+      <if test="brief != null">`brief` = #{brief}, </if>
+      <if test="label != null">`label` = #{label}, </if>
+      <if test="status != null">`status` = #{status}, </if>
+      <if test="praise != null">`praise` = #{praise}, </if>
+      <if test="url != null">`url` = #{url}, </if>
+      <if test="imgs != null">`imgs` = #{imgs}, </if>
+      <if test="author != null">`author` = #{author}, </if>
+      <if test="update_date != null">`update_date` = #{update_date}, </if>
+      <if test="details != null">`details` = #{details} </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, scenery_id, `name`, brief, `label`, create_date, `status`, praise, url, 
+    imgs, author, details, update_date
+    from scenery_introduced
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, scenery_id, `name`, brief, `label`, create_date, `status`, praise, url, 
+    imgs, author, details, update_date
+    from scenery_introduced
+  </select>
+</mapper>

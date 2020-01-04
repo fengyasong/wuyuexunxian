@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aicat.seekfairy.dao.FoodIntroducedDao">
+  <resultMap id="BaseResultMap" type="com.aicat.seekfairy.entity.FoodIntroduced">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="food_id" jdbcType="BIGINT" property="food_id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="brief" jdbcType="VARCHAR" property="brief" />
+    <result column="label" jdbcType="VARCHAR" property="label" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="create_date" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="update_date" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="praise" jdbcType="INTEGER" property="praise" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="imgs" jdbcType="VARCHAR" property="imgs" />
+    <result column="author" jdbcType="BIGINT" property="author" />
+    <result column="details" jdbcType="LONGVARCHAR" property="details" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from food_introduced
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.aicat.seekfairy.entity.FoodIntroduced">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into food_introduced (food_id, `name`, brief, 
+      `label`, create_date, `status`, 
+      praise, url, imgs, 
+      author, details, update_date
+      )
+    values (#{food_id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{brief,jdbcType=VARCHAR}, 
+      #{label,jdbcType=VARCHAR}, #{create_date,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, 
+      #{praise,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{imgs,jdbcType=VARCHAR}, 
+      #{author,jdbcType=BIGINT}, #{details,jdbcType=LONGVARCHAR}, #{update_date,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.aicat.seekfairy.entity.FoodIntroduced">
+    update food_introduced
+    <set>
+      <if test="food_id != null">`food_id` = #{food_id}, </if>
+      <if test="name != null">`name` = #{name}, </if>
+      <if test="brief != null">`brief` = #{brief}, </if>
+      <if test="label != null">`label` = #{label}, </if>
+      <if test="status != null">`status` = #{status}, </if>
+      <if test="praise != null">`praise` = #{praise}, </if>
+      <if test="url != null">`url` = #{url}, </if>
+      <if test="imgs != null">`imgs` = #{imgs}, </if>
+      <if test="author != null">`author` = #{author}, </if>
+      <if test="update_date != null">`update_date` = #{update_date}, </if>
+      <if test="details != null">`details` = #{details} </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, food_id, `name`, brief, `label`, create_date, `status`, praise, url, imgs, 
+    author, details, update_date
+    from food_introduced
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, food_id, `name`, brief, `label`, create_date, `status`, praise, url, imgs, 
+    author, details, update_date
+    from food_introduced
+  </select>
+
+
+  <select id="list" resultMap="BaseResultMap">
+    select * from food_introduced
+    <where>
+      <if test="id != null and id != ''"> and `id` = #{id} </if>
+      <if test="food_id != null and food_id != ''"> and `food_id` = #{food_id} </if>
+      <if test="name != null and name != ''"> and `name` = #{name} </if>
+      <if test="brief != null and brief != ''"> and `brief` = #{brief} </if>
+      <if test="label != null and label != ''"> and `label` = #{label} </if>
+      <if test="create_date != null and create_date != ''"> and `create_date` = #{create_date} </if>
+      <if test="update_date != null and update_date != ''"> and `update_date` = #{update_date} </if>
+      <if test="status != null and status != ''"> and `status` = #{status} </if>
+      <if test="praise != null and praise != ''"> and `praise` = #{praise} </if>
+      <if test="url != null and praise != ''"> and `url` = #{url} </if>
+      <if test="imgs != null and imgs != ''"> and `imgs` = #{imgs} </if>
+      <if test="author != null and author != ''"> and `author` = #{author} </if>
+      <if test="details != null and details != ''"> and `details` = #{details} </if>
+    </where>
+    <choose>
+      <when test="sort != null and sort.trim() != ''">
+        order by ${sort} ${order}
+      </when>
+      <otherwise>
+        order by id desc
+      </otherwise>
+    </choose>
+    <if test="offset != null and limit != null">
+      limit #{offset}, #{limit}
+    </if>
+  </select>
+
+  <select id="count" resultType="int">
+    select count(1) from food_introduced
+    <where>
+      <if test="id != null and id != ''"> and `id` = #{id} </if>
+      <if test="food_id != null and food_id != ''"> and `food_id` = #{food_id} </if>
+      <if test="name != null and name != ''"> and `name` = #{name} </if>
+      <if test="brief != null and brief != ''"> and `brief` = #{brief} </if>
+      <if test="label != null and label != ''"> and `label` = #{label} </if>
+      <if test="create_date != null and create_date != ''"> and `create_date` = #{create_date} </if>
+      <if test="update_date != null and update_date != ''"> and `update_date` = #{update_date} </if>
+      <if test="status != null and status != ''"> and `status` = #{status} </if>
+      <if test="praise != null and praise != ''"> and `praise` = #{praise} </if>
+      <if test="url != null and praise != ''"> and `url` = #{url} </if>
+      <if test="imgs != null and imgs != ''"> and `imgs` = #{imgs} </if>
+      <if test="author != null and author != ''"> and `author` = #{author} </if>
+      <if test="details != null and details != ''"> and `details` = #{details} </if>
+    </where>
+  </select>
+
+  <delete id="batchRemove">
+    delete from food_introduced where id in
+    <foreach item="id" collection="array" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+  </delete>
+</mapper>
