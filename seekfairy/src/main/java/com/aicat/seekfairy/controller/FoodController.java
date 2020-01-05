@@ -4,11 +4,13 @@ import com.aicat.seekfairy.entity.Food;
 import com.aicat.seekfairy.service.FoodIntroService;
 import com.aicat.seekfairy.service.FoodService;
 import com.aicat.seekfairy.utils.R;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -20,9 +22,13 @@ public class FoodController {
     FoodIntroService foodIntroService;
 
     @GetMapping
-    R list(){
-        List<Food> list = foodService.findAll();
-        return R.ok().put("list",list);
+    R list(@RequestParam Map<String, Object> params){
+        int currentPage=Integer.parseInt(params.getOrDefault("page","1").toString());
+        int pageSize=Integer.parseInt(params.getOrDefault("page","10").toString());
+        Page<Food> page = PageHelper.startPage(currentPage,pageSize);
+        foodService.findAll();
+        PageInfo<Food> pageInfo = new PageInfo<>(page);
+        return R.ok().put("page",pageInfo);
     }
     @PostMapping("add")
     R add(@RequestBody Food food){
@@ -35,7 +41,7 @@ public class FoodController {
         return R.operate(i>0);
     }
     @DeleteMapping("remove/{id}")
-    R remove(@PathVariable("id") Long id ){
+    R remove(@PathVariable Long id ){
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("food_id", id);
         if(foodIntroService.count(map)>0) {

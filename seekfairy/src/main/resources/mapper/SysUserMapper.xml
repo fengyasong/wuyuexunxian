@@ -74,4 +74,13 @@
     sex, birth, live_address, hobby, province, city, district, avatar
     from sys_user
   </select>
+
+
+  <select id="loginByUserName" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, user_name, `name`, `password`, email, mobile, `status`, gmt_create, gmt_modified,
+    sex, birth, live_address, hobby, province, city, district, avatar
+    from sys_user
+    where user_name = #{userName}
+  </select>
+
 </mapper>

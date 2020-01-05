@@ -15,4 +15,7 @@ public interface SysUserDao {
     List<SysUser> selectAll();
 
     int updateByPrimaryKey(SysUser record);
+
+    //用户登录，根据用户名查找，user_name
+    SysUser loginByUserName(String userName);
 }

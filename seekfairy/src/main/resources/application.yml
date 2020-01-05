@@ -54,3 +54,12 @@ logging:
     #sql日志
     com.aicat.seekfairy.dao: debug
     #root: info
+
+  #here is the importance configs of JWT
+jwt:
+  route:
+    authentication:
+      path: /auth/login
+  header: Authorization
+  expiration: 604800
+  secret: com.aicat.seekfairy
