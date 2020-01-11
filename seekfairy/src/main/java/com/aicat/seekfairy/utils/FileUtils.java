@@ -107,7 +107,7 @@ public class FileUtils {
         // 判断文件是否存在
         File file = new File(path);
         if(!file.exists()){
-            return data;
+            return null;
         }
         // 获取文件编码格式
         String code = getFileEncode(path);
@@ -121,7 +121,7 @@ public class FileUtils {
             }
             isr = new InputStreamReader(new FileInputStream(file),code);
             // 读取文件内容
-            int length = -1 ;
+            int length ;
             char[] buffer = new char[1024];
             StringBuffer sb = new StringBuffer();
             while((length = isr.read(buffer, 0, 1024) ) != -1){
@@ -187,6 +187,45 @@ public class FileUtils {
         }
         return flag;
     }
+    public static String getFileByLine(String path,int start,int end) {
+        String code = getFileEncode(path);
+        if ("asci".equals(code)) {
+            code = "GBK";
+        }
+        StringBuffer sb = new StringBuffer();
+        InputStreamReader isr = null;
+        LineNumberReader lnb = null;
+        File file = new File(path);
+        try {
+            isr = new InputStreamReader(new FileInputStream(file), code);
+            lnb = new LineNumberReader(isr);
+            String line;
+            while ((line = lnb.readLine()) == null) {
+                start++;
+                sb.append(line + "\n");
+                if (start >= end) break;
+                ;
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (lnb != null) {
+                    lnb.close();
+                }
+                if (isr != null) {
+                    isr.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return sb.toString();
+    }
     /**
      * 读取文件
      * @param url
@@ -218,54 +257,57 @@ public class FileUtils {
     }
 
     /**
-     * 重命名
+     * 重命名文件
      * @param url
-     * @param toKey
+     * @param newName
      * @return
      */
-    public String renameFile(String url, String toKey) {
-        String result = copyFile(url, toKey);
+    public static  boolean renameFile(String url, String newName) {
+        File file = new File(url);
+        String toUrl = file.getParentFile() + File.separator + newName;
+        boolean b = moveFile(url, toUrl);
+        return b;
+    }
+    //移动文件
+    public static  boolean moveFile(String url, String toKey) {
+        boolean b = copyFile(url,toKey);
+        //删除原文件
         deleteFile(url);
-        return result;
+        return b;
     }
 
     /**
      * 复制文件|字节流读取复制
      * @param url
-     * @param toKey
+     * @param toUrl
      */
-    public String copyFile(String url, String toKey) {
-
+    public static boolean copyFile(String url, String toUrl) {
+        boolean flag = true;
         File file = new File(url);
         FileInputStream i = null;
         FileOutputStream o = null;
-        String result = "";
         try {
             i = new FileInputStream(file);
-            o = new FileOutputStream(new File(file.getParentFile() + "/" + toKey));
-
+            o = new FileOutputStream(new File(toUrl));
             byte[] buf = new byte[1024];
             int bytesRead;
-
             while ((bytesRead = i.read(buf)) > 0) {
                 o.write(buf, 0, bytesRead);
             }
-
             i.close();
             o.close();
-            result = file.getParentFile() + "/" + toKey;
         } catch (IOException e) {
             log.error(e.toString());
+            flag = false;
         }
-        return result;
-
+        return flag;
     }
 
     /**
      * 删除文件
      * @param url
      */
-    public void deleteFile(String url) {
+    public static void deleteFile(String url) {
         File file = new File(url);
         file.delete();
     }

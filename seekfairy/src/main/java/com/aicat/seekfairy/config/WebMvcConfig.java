@@ -2,10 +2,7 @@
 package com.aicat.seekfairy.config;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
+import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.annotation.JacksonStdImpl;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -20,7 +17,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.TimeZone;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
@@ -34,9 +33,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         converters.add(toStringConverter());
     }
 
+
     */
 /**
-     * BigDecimal Long 转化为String
+     * BigDecimal Long 转化为String，日期不转换
      * @return
      *//*
 
@@ -44,6 +44,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public MappingJackson2HttpMessageConverter toStringConverter() {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         ObjectMapper mapper = new ObjectMapper();
+        //日期不转换
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        mapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        //BigDecimal Long 转化为String
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(BigDecimal.class, BigDecimalToStringSerializer.instance);
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
