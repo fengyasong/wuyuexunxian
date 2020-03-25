@@ -20,7 +20,7 @@ public class FoodIntroController {
     @GetMapping
     R list(@RequestParam Map<String, Object> params){
         int currentPage=Integer.parseInt(params.getOrDefault("page","1").toString());
-        int pageSize=Integer.parseInt(params.getOrDefault("page","10").toString());
+        int pageSize=Integer.parseInt(params.getOrDefault("size","10").toString());
         Page<FoodIntroduced> page = PageHelper.startPage(currentPage,pageSize);
         foodIntroService.findAll();
         PageInfo<FoodIntroduced> pageInfo = new PageInfo<>(page);

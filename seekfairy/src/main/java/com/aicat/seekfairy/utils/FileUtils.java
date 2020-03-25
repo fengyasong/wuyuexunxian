@@ -11,6 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
 @Slf4j
 public class FileUtils {
 
@@ -377,7 +380,7 @@ public class FileUtils {
      * @param originalFileName ：文件原始文件名
      * @param file ：待下载的文件
      */
-    private static void checkParam(String originalFileName, File file) {
+    protected static void checkParam(String originalFileName, File file) {
         if(StringUtils.isBlank(originalFileName)){
             throw new SeekFairyException("输入的文件原始文件名为空");
         }
@@ -392,7 +395,7 @@ public class FileUtils {
      * @param originalFileName ：原始文件名
      * @return ：
      */
-    private static String getEncodedFilename(HttpServletRequest request, String originalFileName) {
+    protected static String getEncodedFilename(HttpServletRequest request, String originalFileName) {
         String encodedFilename = null;
         String agent = request.getHeader("User-Agent");
         if(agent.contains("MSIE")){
@@ -416,5 +419,71 @@ public class FileUtils {
             }
         }
         return encodedFilename;
+    }
+
+
+
+    /**
+     *文件压缩下载
+     */
+    public static void downloadSource(String originalFileName, String filePath,HttpServletResponse response,HttpServletRequest request) {
+        File file = new File(filePath);
+        // 数据校验
+        checkParam(originalFileName,file);
+
+        //相应头的处理
+        //清空response中的输出流
+        response.reset();
+        //设置文件大小
+        response.setContentLength((int) file.length());
+        //设置Content-Type头
+        response.setContentType("application/octet-stream;charset=UTF-8");
+        //设置Content-Disposition头 以附件形式解析
+        String encodedFilename = getEncodedFilename(request, originalFileName);
+        response.addHeader("Content-Disposition", "attachment;filename=" + encodedFilename);
+
+        //响应头的设置
+        /*response.reset();
+        response.setCharacterEncoding("utf-8");
+        response.setContentType("multipart/form-data");*/
+
+        //设置压缩流：直接写入response，实现边压缩边下载
+        ZipOutputStream zipos = null;
+        try {
+            zipos = new ZipOutputStream(new BufferedOutputStream(response.getOutputStream()));
+            zipos.setMethod(ZipOutputStream.DEFLATED); //设置压缩方法
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //循环将文件写入压缩流
+        DataOutputStream os = null;
+        if(file.exists()){
+
+            try {
+                //添加ZipEntry，并ZipEntry中写入文件流
+                zipos.putNextEntry(new ZipEntry(file.getName()));
+                os = new DataOutputStream(zipos);
+                byte[] b = new byte[100];
+                int length = 0;
+                InputStream is = new FileInputStream(file);
+                while((length = is.read(b))!= -1){
+                    os.write(b, 0, length);
+                }
+                is.close();
+                zipos.closeEntry();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        //关闭流
+        try {
+            os.flush();
+            os.close();
+            zipos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

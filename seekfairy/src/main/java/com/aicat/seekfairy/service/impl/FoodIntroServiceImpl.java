@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class FoodIntroServiceImpl implements FoodIntroService {
@@ -50,5 +51,10 @@ public class FoodIntroServiceImpl implements FoodIntroService {
     public int update(FoodIntroduced foodIntroduced) {
         foodIntroduced.setUpdate_date(new Date());
         return foodIntroducedDao.updateByPrimaryKey(foodIntroduced);
+    }
+
+    @Override
+    public Set<Integer> getIds() {
+        return foodIntroducedDao.getIds();
     }
 }
