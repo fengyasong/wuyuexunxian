@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 @Slf4j
@@ -38,11 +41,23 @@ public class UnPackeUtils {
             /*zip4j默认用GBK编码去解压*/
             zip.setCharset(Charset.forName("UTF-8"));
             log.info("begin unpack zip file....");
-            zip.extractAll(destPath);
             // 如果解压需要密码
             if (zip.isEncrypted()) {
                 zip.setPassword(password.toCharArray());
             }
+            zip.extractAll(destPath);
+
+            List<net.lingala.zip4j.model.FileHeader> headerList = zip.getFileHeaders();
+            List<File> extractedFileList = new ArrayList<File>();
+            for(net.lingala.zip4j.model.FileHeader fileHeader : headerList) {
+                if (!fileHeader.isDirectory()) {
+                    extractedFileList.add(new File(destPath,fileHeader.getFileName()));
+                }
+            }
+            File [] extractedFiles = extractedFileList.stream().toArray(File[]::new);
+            Arrays.stream(extractedFiles).map(File::getName).forEach(System.out::println);
+            //File [] extractedFiles = new File[extractedFileList.size()];
+            //extractedFileList.toArray(extractedFiles);
         } catch (Exception e) {
             log.error("unPack zip file to " + destPath + " fail ....", e.getMessage(), e);
         }
@@ -84,7 +99,7 @@ public class UnPackeUtils {
                 }
             }
         } catch (Exception e) {
-            log.error("unpack rar file fail....", e.getMessage(), e);
+            log.error("unpack rar file fail....{},{}", e.getMessage(), e);
         }
     }
 

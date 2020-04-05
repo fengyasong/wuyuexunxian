@@ -37,7 +37,7 @@ public class FoodController {
     }
     @PutMapping("edit")
     R update(@RequestBody Food food){
-        int i = foodService.create(food);
+        int i = foodService.update(food);
         return R.operate(i>0);
     }
     @DeleteMapping("remove/{id}")

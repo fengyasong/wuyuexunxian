@@ -4,6 +4,7 @@ import com.aicat.seekfairy.common.enums.FileTypeEnum;
 import com.aicat.seekfairy.utils.R;
 import com.aicat.seekfairy.utils.UnPackeUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 
 @Slf4j
 @RestController
@@ -66,7 +68,19 @@ public class UnpackController {
             //rar压缩包
             UnPackeUtils.unPackRar(file, destPath);
         }
+        //解压完，删除压缩包，遍历解压后的文件
+        file.delete();
+        liFile(file.getParentFile());
         return R.ok("解压成功");
+    }
+    //递归遍历文件
+    private void liFile(@NotNull File file){
+        if(file.isFile()){
+            log.info("文件名={}",file.getName());
+        }else {
+            File[] files = file.listFiles();
+            Arrays.stream(files).forEach(e->liFile(e));
+        }
     }
 
 }
