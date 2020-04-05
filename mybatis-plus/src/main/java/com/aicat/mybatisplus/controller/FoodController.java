@@ -4,9 +4,10 @@ import com.aicat.mybatisplus.dao.FoodDao;
 import com.aicat.mybatisplus.dao.FoodIntroducedDao;
 import com.aicat.mybatisplus.entity.Food;
 import com.aicat.mybatisplus.utils.R;
-import com.baomidou.mybatisplus.mapper.Condition;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
+import com.baomidou.mybatisplus.core.conditions.Condition;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,18 +26,9 @@ public class FoodController {
 
     @GetMapping
     R list(@RequestParam Map<String, Object> params){
-        /*int currentPage=Integer.parseInt(params.getOrDefault("page","1").toString());
-        int pageSize=Integer.parseInt(params.getOrDefault("size","10").toString());
-        Page<Food> page = PageHelper.startPage(currentPage,pageSize);
-        foodService.findAll();
-        PageInfo<Food> pageInfo = new PageInfo<>(page);*/
-        //物理分页查询，查询的时候有limit语句
-        List<Food> page1 = foodService.selectPage(new Page<Food>(1,3),
-                new EntityWrapper<Food>()
-                        .between("create_date","2017-03-01","2020-03-01")
-                        .eq("status",0)
-                        .eq("name","tom")
-        );
+        //物理分页查询，查询的时候有limit语句，配置分页插件后物理分页
+        IPage<Food> page1 = foodService.selectPage(new Page<>(1,3),
+                new QueryWrapper<Food>());
         return R.ok().put("page",page1);
     }
     @GetMapping("test")
@@ -48,7 +40,8 @@ public class FoodController {
         Food foodCondition = new Food();
         foodCondition.setName("烧鸡");
         foodCondition.setStatus((byte)1);
-        Food shaoji = foodService.selectOne(foodCondition);
+        Food shaoji = foodService.selectOne(Condition.create(foodCondition));
+        Food shaoji2 = foodService.selectOne(new QueryWrapper(foodCondition));
         //这个方法的sql语句就是where status = 1 and name = "烧鸡"，若是符合这个条件的记录不止一条，那么就会报错。
 
         //根据查询条件返回多条数据
@@ -68,53 +61,52 @@ public class FoodController {
         System.out.println(foods.size());
 
         //内存分页查询，查询的时候并没有limit语句
-        List<Food> neicunPage = foodService.selectPage(new Page<>(1,2),null);
+        IPage<Food> neicunPage = foodService.selectPage(new Page<>(1,2),null);
         System.out.println(neicunPage);
 
-        //条件构造器(EntityWrapper)
+        //条件构造器(QueryWrapper)
         List<Food> employees = foodService.selectList(
-                new EntityWrapper<Food>()
+                new QueryWrapper<Food>()
                         .eq("gender",0)
                         .like("last_name","老师")
                         //.or()//和or new 区别不大
-                        .orNew()
+                        .or()
                         .like("email","a")
         );
         List<Food> employees2 = foodService.selectList(
-                new EntityWrapper<Food>()
+                new QueryWrapper<Food>()
                         .eq("gender",0)
-                        .orderBy("age")//直接orderby 是升序，asc
+                        .orderByAsc("age")//直接orderby 是升序，asc
                         .last("desc limit 1,3")//在sql语句后面追加last里面的内容(改为降序，同时分页)
         );
 
-        //物理分页查询，查询的时候有limit语句
-        List<Food> page1 = foodService.selectPage(new Page<Food>(1,3),
-                new EntityWrapper<Food>()
+        IPage<Food> page1 = foodService.selectPage(new Page<Food>(1,3),
+                new QueryWrapper<Food>()
                         .between("age",18,50)
                         .eq("gender",0)
                         .eq("last_name","tom")
         );
-        List<Food> page2 = foodService.selectPage(
+        /*IPage<Food> page2 = foodService.selectPage(
                 new Page<Food>(1,2),
                 Condition.create()
                         .between("age",18,50)
                         .eq("gender","0")
-        );
-        //Condition和EntityWrapper的区别就是，创建条件构造器时，EntityWrapper是new出来的，而Condition是调create方法创建出来。
+        );*/
+        //Condition和QueryWrapper的区别就是，创建条件构造器时，QueryWrapper是new出来的，而Condition是调create方法创建出来。
 
         //根据条件更新
         Food employee = new Food();
         employee.setName("热干面");
         employee.setStatus((byte)1);
         foodService.update(employee,
-                new EntityWrapper<Food>()
+                new QueryWrapper<Food>()
                         .eq("last_name","tom")
                         .eq("age",25)
         );
 
         //根据条件删除
         foodService.delete(
-                new EntityWrapper<Food>()
+                new QueryWrapper<Food>()
                         .eq("last_name","tom")
                         .eq("age",16)
         );
