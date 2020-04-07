@@ -3,7 +3,7 @@ package com.aicat.seekfairy.controller;
 import com.aicat.seekfairy.entity.Food;
 import com.aicat.seekfairy.service.FoodIntroService;
 import com.aicat.seekfairy.service.FoodService;
-import com.aicat.seekfairy.utils.R;
+import com.aicat.common.utils.R;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;

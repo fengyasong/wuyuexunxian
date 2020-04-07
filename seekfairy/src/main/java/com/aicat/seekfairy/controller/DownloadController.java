@@ -1,6 +1,6 @@
 package com.aicat.seekfairy.controller;
 
-import com.aicat.seekfairy.utils.FileUtils;
+import com.aicat.common.utils.FileUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

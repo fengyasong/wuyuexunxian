@@ -1,8 +1,8 @@
 package com.aicat.seekfairy.controller;
 
-import com.aicat.seekfairy.common.enums.FileTypeEnum;
-import com.aicat.seekfairy.utils.R;
-import com.aicat.seekfairy.utils.UnPackeUtils;
+import com.aicat.common.enums.FileTypeEnum;
+import com.aicat.common.utils.R;
+import com.aicat.common.utils.UnPackeUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.bind.annotation.*;

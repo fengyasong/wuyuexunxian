@@ -1,9 +1,9 @@
 package com.aicat.mybatisplus.controller;
 
+import com.aicat.common.utils.R;
 import com.aicat.mybatisplus.dao.FoodDao;
 import com.aicat.mybatisplus.dao.FoodIntroducedDao;
 import com.aicat.mybatisplus.entity.Food;
-import com.aicat.mybatisplus.utils.R;
 import com.baomidou.mybatisplus.core.conditions.Condition;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;

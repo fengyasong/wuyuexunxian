@@ -10,13 +10,14 @@
         <version>2.2.2.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>groupId</groupId>
+    <groupId>com.aicat</groupId>
     <artifactId>wuyuexunxian</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <modules>
         <module>seekfairy</module>
         <module>mybatis-plus</module>
+        <module>kafka-demo</module>
     </modules>
 
     <properties>

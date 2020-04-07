@@ -1,72 +1,5 @@
 server:
-  port: 8080
-spring:
-  application:
-    name: seekfairy
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    #druid相关配置
-    druid:
-      #监控统计拦截的filters
-      filter: stat
-      #mysql驱动
-      driver-class-name: com.mysql.jdbc.Driver
-      #基本属性
-      url: jdbc:mysql://127.0.0.1:3306/seekfairy?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=GMT
-      username: root
-      password: root
-      #配置初始化大小/最小/最大
-      initial-size: 1
-      min-idle: 1
-      max-active: 20
-      #获取连接等待超时时间
-      max-wait: 60000
-      #间隔多久进行一次检测，检测需要关闭的空闲连接
-      time-between-eviction-runs-millis: 60000
-  jackson:
-    date-format: yyyy-MM-dd
-    time-zone: GMT+8
-  #文件上传相关设置
-  servlet:
-    multipart:
-      max-file-size: 50MB
-      max-request-size: 100MB
-  #spring-aop配置
-  aop:
-    #启用@Aspectj注解驱动的切面，允许Spring创建基于类的代理
-    auto: true
-    proxy-target-class: true
-
-mybatis:
-  mapper-locations: mapper/**Mapper.xml
-  configuration:
-    map-underscore-to-camel-case: true  #将带有下划线的表字段映射为驼峰格式的实体类属性
-    #如果查询结果中包含空值的列，则 MyBatis 在映射的时候，不会映射这个字段
-    call-setters-on-nulls: true
-#mybaatis分页插件pagehelper设置
-pagehelper:
-  pagehelperDialect: mysql
-  reasonable: true
-  support-methods-arguments: true
-  params: count=countSql
-
-
-logging:
-  level:
-    #sql日志
-    com.aicat.seekfairy.dao: debug
-    #root: info
-
-  #here is the importance configs of JWT
-jwt:
-  route:
-    authentication:
-      path: /auth/login
-  header: Authorization
-  expiration: 604800
-  secret: com.aicat.seekfairy
-
-
+  port: 8082
 #kafka配置信息
 spring.kafka:
   producer:
@@ -95,6 +28,6 @@ spring.kafka:
     value-deserializer: org.apache.kafka.exceptions.serialization.StringDeserializer
   listener:
     batch-listener: true                                #是否开启批量消费，true表示批量消费
-    concurrencys: 2,4                                     #设置消费的线程数
+    concurrency: 1                                    #设置消费的线程数
     poll-timeout: 1500                                  #只限自动提交，
     topics: TranLog,test
