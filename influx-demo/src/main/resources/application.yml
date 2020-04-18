@@ -1,0 +1,7 @@
+server:
+  port: 8083
+
+influx:
+  openurl: http:loaclhost:8086
+  database: seek
+  measurement: fairy

@@ -1,6 +1,7 @@
 package com.aicat.seekfairy.controller;
 
 import com.aicat.common.utils.R;
+import com.aicat.seekfairy.entity.Food;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -94,6 +97,17 @@ public class Test {
         return R.ok().put("reqcontent",sb.toString());
     }
 
+    public static void main(String[] args) {
+        List<Food> list = new ArrayList<>(10);
+        Food food;
+        for (int i = 0; i < 10; i++) {
+            food = new Food();
+            food.setId((long) i);
+            food.setName("name" + i);
+            list.add(food);
+        }
+        System.out.println(list.toString());
+    }
 
 
 }
