@@ -17,7 +17,7 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         return Arrays.stream(param).map(Integer::valueOf).toArray(Integer[]::new);
     }
     public static void main(String[] args) {
-        HashMap<String, String> map = new HashMap<>();
+        /*HashMap<String, String> map = new HashMap<>();
         for (int i = 0; i < 1000; i++) {
             map.put(Integer.toString(i), String.valueOf(i));
         }
@@ -32,11 +32,17 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         map.forEach((k, v) -> System.out.println(k + "=" + v));
         long time3 = System.currentTimeMillis();
         System.out.println("方法一耗时=" + (time2 - time1));
-        System.out.println("方法二耗时=" + (time3 - time2));
-        /*Integer[] a = Arrays.stream("1,2,3,4".split(",")).map(Integer::valueOf).toArray(Integer[]::new);
+        System.out.println("方法二耗时=" + (time3 - time2));*/
+        //Integer[] a = Arrays.stream(",,,".split(",")).map(Integer::valueOf).toArray(Integer[]::new);
+        String[] a = "1,2,3,4".split(",");
         System.out.println(a);
-        List<Integer> list = Arrays.asList(a);
-        System.out.println(list);*/
+        List<String> list = Arrays.asList(a);//此list不可以操作
+        list.add("6");//报错
+        List<String> list2 = new ArrayList<>();
+        Collections.addAll(list2,a);
+        list2.add("5");
+        System.out.println(list2);
+
         //System.out.println(Arrays.stream(a));
         /*File file = new File("D:\\IdeaProjects\\0722\\ttt2\\tttt\\.idea");
         File [] extractedFiles = file.listFiles();
