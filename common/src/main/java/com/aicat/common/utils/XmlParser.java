@@ -11,12 +11,6 @@ import java.io.IOException;
 import java.util.*;
 
 
-/**
- *
- * @类名: XmlParser
- * @类功能描述: 解析xml
- * @时间 ：2011-4-13 上午08:33:50
- */
 public class XmlParser{
     /**
      *
@@ -24,7 +18,6 @@ public class XmlParser{
      * @方法名:createEmptyXmlFile
      * @param xmlPath
      * @返回类型：Document
-     * @时间：2011-4-14下午12:44:20
      */
     public static Document createEmptyXmlFile(String xmlPath){
         if(xmlPath==null || xmlPath.equals(""))
@@ -73,7 +66,6 @@ public class XmlParser{
      * @方法名:getRootEleme
      * @param document
      * @返回类型：Element
-     * @时间：2011-4-8下午12:54:02
      */
     public static Element getRootNode(Document document){
         if(document==null)
@@ -90,7 +82,6 @@ public class XmlParser{
      * @return
      * @throws DocumentException @参数描述 :
      * @返回类型：Element
-     * @时间：2011-4-14下午03:01:14
      */
     public static Element getRootNode(String xmlPath) {
         if(xmlPath==null||(xmlPath.trim()).equals(""))
@@ -106,7 +97,6 @@ public class XmlParser{
      * @方法名:getIterator
      * @param parent
      * @返回类型：Iterator<Element>
-     * @时间：2011-4-14上午11:29:18
      */
     @SuppressWarnings("unchecked")
     public static Iterator<Element> getIterator(Element parent){
@@ -123,7 +113,6 @@ public class XmlParser{
      * @param parent
      * @param childName
      * @返回类型：Element
-     * @时间：2011-4-14上午11:18:03
      */
     @SuppressWarnings("unchecked")
     public static  List<Node> getChildElements(Element parent,String childName){
@@ -140,7 +129,6 @@ public class XmlParser{
      * @param node
      * @return @参数描述 :
      * @返回类型：List<Element>
-     * @时间：2011-4-14下午12:21:52
      */
     public static  List<Element> getChildList(Element node){
         if (node==null)
@@ -165,7 +153,6 @@ public class XmlParser{
      * @param nodeNodeName
      * @return @参数描述 : 父节点，子节点名称
      * @返回类型：Node
-     * @时间：2011-4-14下午12:38:25
      */
     public static Node getSingleNode(Element parent,String nodeNodeName){
         nodeNodeName = nodeNodeName.trim();
@@ -186,7 +173,6 @@ public class XmlParser{
      * @param childName
      * @return @参数描述 :
      * @返回类型：Element
-     * @时间：2011-4-14下午12:53:22
      */
     @SuppressWarnings("rawtypes")
     public static Element getChild(Element parent,String childName){
@@ -213,7 +199,6 @@ public class XmlParser{
      * @方法名:hasChild
      * @param e
      * @返回类型：boolean
-     * @时间：2011-4-14下午01:43:48
      */
     public static boolean hasChild(Element e){
         if(e==null)
@@ -226,7 +211,6 @@ public class XmlParser{
      * @方法名:getAttrIterator
      * @param e
      * @返回类型：Iterator<Attribute>
-     * @时间：2011-4-14下午01:42:38
      */
     @SuppressWarnings("unchecked")
     public static Iterator<Attribute> getAttrIterator(Element e){
@@ -242,7 +226,6 @@ public class XmlParser{
      * @param e
      * @return 节点属性的list集合
      * @返回类型：List<Attribute>
-     * @时间：2011-4-14下午01:41:38
      */
     public static List<Attribute> getAttributeList(Element e){
         if(e==null)
@@ -265,7 +248,6 @@ public class XmlParser{
      * @param attrName 属性名称
      * @return Attribute
      * @返回类型：Attribute
-     * @时间：2011-4-14下午01:45:27
      */
     public static Attribute getAttribute(Element element , String attrName){
         attrName = attrName.trim();
@@ -300,7 +282,6 @@ public class XmlParser{
      * @方法名:getNodeAttrMap
      * @return 属性集合
      * @返回类型：Map<String,String>
-     * @时间：2011-4-15上午10:00:26
      */
     public static Map<String,String> getNodeAttrMap(Element e){
         Map<String,String> attrMap = new HashMap<String, String>();
@@ -324,7 +305,6 @@ public class XmlParser{
      * @param e
      * @return @参数描述 :
      * @返回类型：Map<String,String>
-     * @时间：2011-4-15下午12:24:38
      */
     public static Map<String, String> getSingleNodeText(Element e){
         Map<String, String> map = new HashMap<String, String>();
@@ -346,7 +326,6 @@ public class XmlParser{
      * @param xmlFilePath
      * @return @参数描述 :
      * @返回类型：Map<String,String>
-     * @时间：2011-4-15下午12:23:30
      */
     public static Map<String,String> getSingleNodeText(String xmlFilePath){
         xmlFilePath = xmlFilePath.trim();
@@ -364,8 +343,6 @@ public class XmlParser{
      * @方法功能描述:根据xml路径和指定的节点的名称，得到指定节点,从根节点开始找
      * @方法名:getNameNode
      * @返回类型：Element 指定的节点
-     * @时间：2011-4-15下午12:22:35
-     *
      */
 
     public enum Flag{one,more}
@@ -393,7 +370,6 @@ public class XmlParser{
      * @方法名:getNameNodeAllAttributeMap
      * @return @参数描述 :
      * @返回类型：Map<Integer,Object>
-     * @时间：2011-4-18下午04:40:14
      */
     public static Map<Integer,Object> getNameNodeAllKidsAttributeMap(Element parent){
         Map<Integer,Object> allAttrMap = new HashMap<Integer, Object>();
@@ -415,7 +391,6 @@ public class XmlParser{
      * @方法名:getNameNodeAllAttributeMap
      * @return @参数描述 :
      * @返回类型：Map<Integer,Object>
-     * @时间：2011-4-18下午04:51:46
      */
     @SuppressWarnings("unchecked")
     public static <T>T getNameNodeAllAttributeMap(String xmlFilePath,String nodeName,Flag flag){
@@ -444,9 +419,7 @@ public class XmlParser{
      *
      * @方法功能描述:遍历指定的节点下所有的节点
      * @方法名:ransack
-     * @param element @参数描述 :
-     * @返回类型：void
-     * @时间：2011-4-18下午05:25:41
+     * @param element @参数描述
      */
     public static List<Element> ransack(Element element,List<Element> allkidsList){
         if(element == null)
@@ -468,7 +441,6 @@ public class XmlParser{
      * @param nodeName
      * @return @参数描述 :
      * @返回类型：Element
-     * @时间：2011-4-18下午06:18:56
      */
     public static List<Element> getNameElement(Element element ,String nodeName){
         nodeName = nodeName.trim();
@@ -494,7 +466,6 @@ public class XmlParser{
      * @方法名:validateSingle
      * @param element
      * @返回类型：int 节点唯一返回1,节点不唯一返回大于一的整型数据
-     * @时间：2011-4-20下午04:36:22
      */
     public static int validateSingle(Element element){
         int j = 1;
@@ -507,5 +478,65 @@ public class XmlParser{
                 j++;
         }
         return j;
+    }
+
+    /**
+     * 这个element的开始标签与它的第一个子标签或结束标签之间的文本
+     * @param element
+     * @return
+     */
+    public static String getText(Element element) {
+        StringBuffer sb = new StringBuffer();
+        List<Node> nodeList = element.content();
+        for (Node e:nodeList) {
+            if (Node.TEXT_NODE == e.getNodeType()) {
+                sb.append(e.getText().replaceAll("\\s", " "));
+            } else if (Node.ELEMENT_NODE == e.getNodeType()) {
+                break;
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 这个element的结束标签与下一个标签之间的文本
+     * @param element
+     * @return
+     */
+    public static String getTail(Element element){
+        StringBuffer sb = new StringBuffer();
+        Element parent = element.getParent();
+        int count = parent.nodeCount();
+        int index = parent.indexOf(element);
+        List<Node> nodeList = parent.content();
+        for (int i = index+1; i < count; i++) {
+            Node e = nodeList.get(i);
+            if (Node.TEXT_NODE == e.getNodeType()) {
+                sb.append(e.getText().replaceAll("\\s", " "));
+            } else if (Node.ELEMENT_NODE == e.getNodeType()) {
+                break;
+            }
+        }
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        String test = "<a><b>1<c>2<d/>3</c>111<c2>11</c2></b>4</a>";
+        try {
+            Document doc = DocumentHelper.parseText(test);
+            Element root = doc.getRootElement();
+            Element b = getChild(root,"b");
+            Element c = getChild(b,"c");
+            Element d = getChild(c,"d");
+            String cText = c.getText();
+            String cTextc = getText(c);
+            int count = b.nodeCount();
+            int index = b.indexOf(c);
+            String cTail = getTail(c);
+            System.out.println("cTail==="+cTail);
+            System.out.println(count+"==="+index);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
     }
 }

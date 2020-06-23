@@ -1,6 +1,6 @@
 package com.aicat.common.mapper2sql;
 
-import org.apache.commons.lang3.StringUtils;
+import com.aicat.common.utils.XmlParser;
 import org.dom4j.Element;
 
 import java.util.*;
@@ -51,10 +51,18 @@ public class Params {
     public static Map<String,List<Map<String,String>>> get_params(Element child){
         Pattern pattern = Pattern.compile("\\S");
         // Remove empty info
-        String child_text = StringUtils.isNotBlank(child.getTextTrim()) ? child.getTextTrim() : "";
+        //String child_text = StringUtils.isNotBlank(child.getTextTrim()) ? child.getTextTrim() : "";
 
-        Matcher match = pattern.matcher(child_text) ;
-        String convert_string = match.find()? child_text:"";
+        //Matcher match = pattern.matcher(child_text) ;
+        //String convert_string = match.find()? child_text:"";
+
+        String child_text = XmlParser.getText(child);
+        String child_tail = XmlParser.getTail(child);
+        Matcher match = pattern.matcher(child_text);
+        child_text = match.find() ? child_text : "";
+        match = pattern.matcher(child_tail);
+        child_tail = match.find() ? child_tail : "";
+        String convert_string = child_text + child_tail;
 
         Map<String,List<Map<String,String>>> params = new HashMap<>(2);
         List<Map<String,String>> symbol3up = new ArrayList<>();

@@ -62,6 +62,7 @@ public class Generate {
     public static String get_child_statement(Map<String,Element> mybatis_mapper, String child_id) {
         StringBuffer statement = new StringBuffer();
         Element child = mybatis_mapper.get(child_id);
+
         Map<String,Object> kwargs = new HashMap<>();
         statement.append(Convert.convert_children(mybatis_mapper, child,kwargs));
         //The child element has children
@@ -101,153 +102,36 @@ public class Generate {
                 "        <include refid=\"${include_target}\"/>\n" +
                 "        <include refid=\"somewhere\"/>\n" +
                 "    </sql>\n" +
-                "    <select id=\"testParameters\">\n" +
-                "        SELECT\n" +
-                "        name,\n" +
-                "        category,\n" +
-                "        price\n" +
-                "        FROM\n" +
-                "        fruits\n" +
-                "        WHERE\n" +
-                "        category = #{category}\n" +
-                "        AND price > ${price}\n" +
-                "    </select>\n" +
-                "    <select id=\"testInclude\">\n" +
-                "        SELECT\n" +
-                "        name,\n" +
-                "        category,\n" +
-                "        price\n" +
-                "        <include refid=\"someinclude\">\n" +
-                "            <property name=\"prefix\" value=\"Some\"/>\n" +
-                "            <property name=\"include_target\" value=\"sometable\"/>\n" +
-                "        </include>\n" +
-                "    </select>\n" +
-                "    <select id=\"testIf\">\n" +
-                "        SELECT\n" +
-                "        name,\n" +
-                "        category,\n" +
-                "        price\n" +
-                "        FROM\n" +
-                "        fruits\n" +
-                "        WHERE\n" +
-                "        1=1\n" +
-                "        <if test=\"category != null and category !=''\">\n" +
-                "            AND category = #{category}\n" +
-                "        </if>\n" +
-                "        <if test=\"price != null and price !=''\">\n" +
-                "            AND price = ${price}\n" +
-                "            <if test=\"price >= 400\">\n" +
-                "                AND name = 'Fuji'\n" +
-                "            </if>\n" +
-                "        </if>\n" +
-                "    </select>\n" +
-                "    <select id=\"testTrim\">\n" +
-                "        SELECT\n" +
-                "        name,\n" +
-                "        category,\n" +
-                "        price\n" +
-                "        FROM\n" +
-                "        fruits\n" +
-                "        <trim prefix=\"WHERE\" prefixOverrides=\"AND|OR\">\n" +
-                "            OR category = 'apple'\n" +
-                "            OR price = 200\n" +
-                "        </trim>\n" +
-                "    </select>\n" +
-                "    <select id=\"testWhere\">\n" +
-                "        SELECT\n" +
-                "        name,\n" +
-                "        category,\n" +
-                "        price\n" +
-                "        FROM\n" +
-                "        fruits\n" +
-                "        <where>\n" +
-                "            AND category = 'apple'\n" +
-                "            <if test=\"price != null and price !=''\">\n" +
-                "                AND price = ${price}\n" +
-                "            </if>\n" +
-                "        </where>\n" +
-                "    </select>\n" +
-                "    <update id=\"testSet\">\n" +
-                "        UPDATE\n" +
-                "        fruits\n" +
-                "        <set>\n" +
-                "            <if test=\"category != null and category !=''\">\n" +
-                "                category = #{category},\n" +
-                "            </if>\n" +
-                "            <if test=\"price != null and price !=''\">\n" +
-                "                price = ${price},\n" +
-                "            </if>\n" +
-                "        </set>\n" +
-                "        WHERE\n" +
-                "        name = #{name}\n" +
-                "    </update>\n" +
-                "    <select id=\"testChoose\">\n" +
-                "        SELECT\n" +
-                "        name,\n" +
-                "        category,\n" +
-                "        price\n" +
-                "        FROM\n" +
-                "        fruits\n" +
-                "        <where>\n" +
-                "            <choose>\n" +
-                "                <when test=\"name != null\">\n" +
-                "                    AND name = #{name}\n" +
-                "                </when>\n" +
-                "                <when test=\"category == 'banana'\">\n" +
-                "                    AND category = #{category}\n" +
-                "                    <if test=\"price != null and price !=''\">\n" +
-                "                        AND price = ${price}\n" +
-                "                    </if>\n" +
-                "                </when>\n" +
-                "                <otherwise>\n" +
-                "                    AND category = 'apple'\n" +
-                "                </otherwise>\n" +
-                "            </choose>\n" +
-                "        </where>\n" +
-                "    </select>\n" +
                 "    <select id=\"testForeach\">\n" +
                 "        SELECT\n" +
                 "        name,\n" +
                 "        category,\n" +
+                "" +
+                "" +
+                "" +
+                "" +
+                "" +
+
                 "        price\n" +
                 "        FROM\n" +
                 "        fruits\n" +
                 "        <where>\n" +
+                "" +
+                "" +
                 "            category = 'apple' AND\n" +
+                "" +
+                "" +
+                "" +
+                "<if test=\"age lt 18\">" +
+                "<![CDATA[  age<#{age} and ]]>" +
+                "</if>"+
                 "            <foreach collection=\"apples\" item=\"name\" open=\"(\" close=\")\" separator=\"OR\">\n" +
                 "                <if test=\"name == 'Jonathan' or name == 'Fuji'\">\n" +
                 "                    name = #{name}\n" +
                 "                </if>\n" +
                 "            </foreach>\n" +
                 "        </where>\n" +
-                "    </select>\n" +
-                "    <insert id=\"testInsertMulti\">\n" +
-                "        INSERT INTO\n" +
-                "        fruits\n" +
-                "        (\n" +
-                "        name,\n" +
-                "        category,\n" +
-                "        price\n" +
-                "        )\n" +
-                "        VALUES\n" +
-                "        <foreach collection=\"fruits\" item=\"fruit\" separator=\",\">\n" +
-                "            (\n" +
-                "            #{fruit.name},\n" +
-                "            #{fruit.category},\n" +
-                "            ${fruit.price}\n" +
-                "            )\n" +
-                "        </foreach>\n" +
-                "    </insert>\n" +
-                "    <select id=\"testBind\">\n" +
-                "        <bind name=\"likeName\" value=\"'%' + name + '%'\"/>\n" +
-                "        SELECT\n" +
-                "        name,\n" +
-                "        category,\n" +
-                "        price\n" +
-                "        FROM\n" +
-                "        fruits\n" +
-                "        WHERE\n" +
-                "        name like #{likeName}\n" +
+                "order by id desc"+
                 "    </select>\n" +
                 "</mapper>";
         long start = System.currentTimeMillis();

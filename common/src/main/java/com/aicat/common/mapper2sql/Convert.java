@@ -25,7 +25,7 @@ public class Convert {
     }
     public static String  convert_children(Map<String, Element> mybatis_mapper, Element child,Map<String,Object> kwargs) {
         if (query_types.contains(child.getName())){
-            return convert_parameters(child);
+            return convert_parameters(child,true,true);
         }else if("include".equalsIgnoreCase(child.getName())){
             return convert_include(mybatis_mapper, child,kwargs);
         }else if("if".equalsIgnoreCase(child.getName())){
@@ -64,22 +64,41 @@ public class Convert {
         return string;
     }
 
-    public static String convert_parameters(Element child){
+    /**
+     * text=False, tail=False
+     * @param child
+     * @param text
+     * @param tail
+     * @return
+     */
+    public static String convert_parameters(Element child,boolean text, boolean tail) {
         Pattern pattern = Pattern.compile("\\S");
         // Remove empty info
-        String child_text = StringUtils.isNotBlank(child.getTextTrim()) ? child.getTextTrim() : "";
-        //List<Node> list = child.content();
-        Matcher match = pattern.matcher(child_text) ;
-        String convert_string = match.find()? child_text:"";
+        String child_text = XmlParser.getText(child);
+        String child_tail = XmlParser.getTail(child);
+        Matcher match = pattern.matcher(child_text);
+        child_text = match.find() ? child_text : "";
+        match = pattern.matcher(child_tail);
+        child_tail = match.find() ? child_tail : "";
+        String convert_string;
+        if (text && tail) {
+            convert_string = child_text + child_tail;
+        } else if (text && !tail) {
+            convert_string = child_text;
+        } else if (!text && tail) {
+            convert_string = child_tail;
+        } else {
+            convert_string = "";
+        }
         //# replace params
-        Map<String,List<Map<String,String>>> params = Params.get_params(child);
-        List<Map<String,String>> paramsAll = params.get("#");
+        Map<String, List<Map<String, String>>> params = Params.get_params(child);
+        List<Map<String, String>> paramsAll = params.get("#");
         paramsAll.addAll(params.get("$"));
-        for (Map<String,String> param:paramsAll) {
+        for (Map<String, String> param : paramsAll) {
             convert_string = convert_string.replace(param.get("full_name"), param.get("mock_value"));
         }
         // convert CDATA string
-        convert_string = convert_cdata(convert_string,false);
+        convert_string = convert_cdata(convert_string, false);
         return convert_string;
     }
     public static String convert_include(Map<String,Element> mybatis_mapper,Element child,Map<String,Object> kwargs){
@@ -110,11 +129,13 @@ public class Convert {
         List<Element> include_child_list = XmlParser.getChildList(include_child);
         convert_string += convert_children(mybatis_mapper, include_child,kwargs);
         // add include text
-        convert_string += convert_parameters(child);
+        convert_string += convert_parameters(child,true,false);
         for (Element next_child:include_child_list) {
             kwargs.put("properties",properties);
             convert_string += convert_children(mybatis_mapper, next_child, kwargs);
         }
+        //# add include tail
+        convert_string += convert_parameters(child, false,true);
         return convert_string;
     }
 
@@ -122,12 +143,14 @@ public class Convert {
         String convert_string = " ";
         String test = child.attributeValue("test");
         //# Add if text
-        convert_string += convert_parameters(child);
+        convert_string += convert_parameters(child,true,false);
         List<Element> list = XmlParser.getChildList(child);
         for (Element next_child:list) {
             convert_string += convert_children(mybatis_mapper, next_child, kwargs);
         }
         //convert_string += "-- if(" + test + ")\n";
+        //# Add if tail
+        convert_string += convert_parameters(child,false, true);
         return convert_string;
     }
 
@@ -144,13 +167,13 @@ public class Convert {
                     break;
                 }else {
                     String test = next_child.attributeValue("test");
-                    convert_string += convert_parameters(next_child);
+                    convert_string += convert_parameters(next_child,true,true);
                     //convert_string += " -- if(" + test + ")";
                     when_element_cnt += 1;
                     kwargs.put("when_element_cnt", when_element_cnt);
                 }
             }else if("otherwise".equalsIgnoreCase(next_child.getName())){
-                convert_string += convert_parameters(next_child);
+                convert_string += convert_parameters(next_child,true,true);
                 //convert_string += " -- otherwise";
             }
             convert_string += convert_children(mybatis_mapper, next_child, kwargs);
@@ -183,7 +206,7 @@ public class Convert {
         }
         String convert_string = "";
         // Add trim/where/set text
-        convert_string += convert_parameters(child);
+        convert_string += convert_parameters(child,true,false);
         // Convert children first
         List<Element> list = XmlParser.getChildList(child);
         for (Element next_child:list) {
@@ -221,6 +244,8 @@ public class Convert {
                 convert_string = convert_string + " " + suffix;
             }
         }
+        //# Add trim/where/set tail
+        convert_string += convert_parameters(child,false,true);
         return convert_string;
     }
 
@@ -233,13 +258,15 @@ public class Convert {
         String separator = child.attributeValue("separator", "");
         String convert_string = " ";
         //# Add foreach text
-        convert_string += convert_parameters(child);
+        convert_string += convert_parameters(child,true,false);
         List<Element> list = XmlParser.getChildList(child);
         for (Element next_child:list) {
             convert_string += convert_children(mybatis_mapper, next_child, kwargs);
         }
         //# Add two items
         convert_string = open + convert_string + separator + convert_string + close;
+        //# Add foreach tail
+        convert_string += convert_parameters(child,false, true);
         return convert_string;
     }
 
@@ -247,7 +274,7 @@ public class Convert {
         String name = child.attributeValue("name");
         String value = child.attributeValue("value");
         String convert_string = " ";
-        convert_string += convert_parameters(child);
+        convert_string += convert_parameters(child,false,true);
         convert_string = convert_string.replace(name, value);
         return convert_string;
     }
