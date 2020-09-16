@@ -1,4 +1,3 @@
-/*
 package com.aicat.seekfairy.config;
 
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -12,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
@@ -23,6 +23,17 @@ import java.util.TimeZone;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    //拦截器
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(authInterceptor()).addPathPatterns("/**");
+    }
+    @Bean
+    AuthInterceptor authInterceptor(){
+        return new AuthInterceptor();
+    };
+
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         configurer.favorPathExtension(false);
@@ -34,11 +45,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
 
-    */
+
 /**
      * BigDecimal Long 转化为String，日期不转换
      * @return
-     *//*
+     */
 
     @Bean
     public MappingJackson2HttpMessageConverter toStringConverter() {
@@ -101,4 +112,3 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
 }
-*/
